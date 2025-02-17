@@ -4,7 +4,7 @@ Encrypted messaging app with one way messaging and symmetric encryption.
 
 ## Running the project
 
-Requirements are Node (I used v20.14) and npm. To run the project, simply run `npm run init` in the topmost folder, this will set up everything and launch both the client and server. You can access the client app at `localhost:5173`, the server uses `localhost:3000`.
+Requirements are Node (I used v20.14) and npm. To run the project, simply run `npm run init` in the topmost folder, this will set up everything and launch both the client and server. You can access the client app at `localhost:4173` (if launched this way, Vite uses port 5173 for dev mode), the server uses `localhost:3000`.
 
 The sender 
 
@@ -70,3 +70,4 @@ For simplicity's sake, the minimum amount of tools are used:
 - There are some bugs that I have not investigated: 
   - Sometimes, when sending a new message, the receiver will receive some extra character, which breaks the signature verification. I think something is going wrong when encoding the cipher text to plain text, so I would start debuggin by comparing the cipher texts in the `encryptMessage` and `decryptMessage` functions.
   - Sometimes, the receiver fails to decrypt the content entirely and encoding fails. Something similar is probably going wrong as above.
+- I did not use HTTPS in local mode
