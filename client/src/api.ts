@@ -24,8 +24,8 @@ export const getMessage = async (key: string) => {
   const body = await response.text();
 
   const message = decryptMessage(body, key);
-  const signature = response.headers.get(SIGNATURE_HEADER);
-  const valid = isHashValid(message, signature ?? "", key);
+  const signature = response.headers.get(SIGNATURE_HEADER) ?? '';
+  const valid = isHashValid(message, key, signature);
 
   return { message, valid };
 };
