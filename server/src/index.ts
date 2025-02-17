@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 
 const message = {
-  hmac: "",
+  signature: "",
   content: "",
 };
 
@@ -18,15 +18,17 @@ app.use("/", (req, _, next) => {
 });
 
 app.get("/", (_, res) => {
-    console.log(message.content)
-  res.set({ "content-type": "text/plain; charset=utf-8" });
-  res.set("X-Signature", message.hmac);
-  res.send(message.content);
+  res
+    .set({
+      "Access-Control-Expose-Headers": "X-Signature",
+      "X-Signature": message.signature,
+    })
+    .send(message.content);
 });
 
 app.post("/", (req, res) => {
   message.content = req.body;
-  message.hmac = req.get("X-Signature") ?? "";
+  message.signature = req.get("X-Signature") ?? "";
   res.send("Sent message!");
 });
 

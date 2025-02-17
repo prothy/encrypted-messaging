@@ -1,6 +1,4 @@
-import CryptoJS from "crypto-js";
-import aes from "crypto-js/aes";
-import hmac from "crypto-js/hmac-sha1";
+import CryptoJS, { AES, HmacSHA1, SHA256 } from "crypto-js";
 
 export const debounce = (
   callback: (...args: any[]) => any,
@@ -18,16 +16,18 @@ export const debounce = (
     });
 };
 
-// const key = crypto.randomUUID();
+export const getKeyFromUrl = () => {
+  const { searchParams } = new URL(location.href);
 
-// console.log(key);
-
-const secretKey = CryptoJS.SHA256('secret key')
+  return searchParams.get("key");
+};
 
 export const encryptMessage = (message: string, key: string) => {
   const iv = CryptoJS.lib.WordArray.random(16);
 
-  const encrypted = aes.encrypt(message, secretKey, {
+  console.log(key);
+
+  const encrypted = AES.encrypt(message, SHA256(key), {
     iv,
     mode: CryptoJS.mode.CFB,
     padding: CryptoJS.pad.NoPadding,
@@ -40,7 +40,7 @@ export const encryptMessage = (message: string, key: string) => {
   return encryptedString;
 };
 
-export const decryptMessage = (encrypted: string, hash: string) => {
+export const decryptMessage = (encrypted: string, key: string) => {
   const cipher = CryptoJS.enc.Base64.parse(encrypted);
 
   const iv = CryptoJS.lib.WordArray.create(cipher.words.slice(0, 4));
@@ -50,19 +50,21 @@ export const decryptMessage = (encrypted: string, hash: string) => {
     ciphertext,
   });
 
-  const decrypted = aes.decrypt(cipherParams, secretKey, {
+  const decrypted = AES.decrypt(cipherParams, SHA256(key), {
     iv,
     mode: CryptoJS.mode.CFB,
     padding: CryptoJS.pad.NoPadding,
   });
 
-  const text = decrypted.toString(CryptoJS.enc.Utf8);
-
-  return text;
+  return decrypted.toString(CryptoJS.enc.Utf8);
 };
 
-export const generateHash = (message: string, key: string) =>
-  hmac(message, key).toString();
+export const generateHash = (message: string, key: string) => {
+  const parsedKey = CryptoJS.enc.Utf8.parse(key);
+  const hmac = HmacSHA1(message, parsedKey);
 
-export const isHashValid = (message: string, hash: string, key: string) =>
-  hash === hmac(message, key).toString();
+  return hmac.toString(CryptoJS.enc.Hex);
+};
+
+export const isHashValid = (message: string, key: string, hash: string) =>
+  hash === generateHash(message, key);
