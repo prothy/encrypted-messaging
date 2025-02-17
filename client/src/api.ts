@@ -11,7 +11,6 @@ const SIGNATURE_HEADER = "X-Signature";
 export const postMessage = async (message: string, key: string) => {
   fetch(SERVER_URL, {
     headers: {
-      "Content-Type": "text/plain; charset=UTF-8",
       [SIGNATURE_HEADER]: generateHash(message, key),
     },
     method: "post",
