@@ -12,10 +12,6 @@ const message = {
 
 app.use(bodyParser.text());
 app.use(cors());
-app.use("/", (req, _, next) => {
-  console.log(req.method, req.body);
-  next();
-});
 
 app.get("/", (_, res) => {
   res

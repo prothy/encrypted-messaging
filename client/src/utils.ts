@@ -5,7 +5,7 @@ export const debounce = (
   callback: (...args: any[]) => any,
   timeout: number
 ) => {
-  let timeoutId: number;
+  let timeoutId: NodeJS.Timeout;
 
   return (...args: any[]) =>
     new Promise((resolve) => {
@@ -42,8 +42,6 @@ export const debouncedPostMessage = debounce(async (ev, key) => {
 
 export const encryptMessage = (message: string, key: string) => {
   const iv = CryptoJS.lib.WordArray.random(16);
-
-  console.log(key);
 
   const encrypted = AES.encrypt(message, SHA256(key), {
     iv,

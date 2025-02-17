@@ -1,0 +1,21 @@
+{
+  "name": "encrypted-messaging",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm install client && npm install server",
+    "build": "(cd client && npm run build); (cd server && npm run build)",
+    "start:server": "cd server && npm start",
+    "start:client": "cd client && npm run preview",
+    "init": "npm run install && npm run build && npm run start:client & npm run start:server"
+  },
+  "postinstall": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "client": "^0.0.1",
+    "server": "^1.0.41"
+  }
+}
