@@ -1,4 +1,5 @@
 import CryptoJS, { AES, HmacSHA1, SHA256 } from "crypto-js";
+import { postMessage } from "./api";
 
 export const debounce = (
   callback: (...args: any[]) => any,
@@ -16,11 +17,28 @@ export const debounce = (
     });
 };
 
+export const generateKey = () => {
+  const currentKey = sessionStorage.getItem("key");
+
+  if (currentKey) {
+    return currentKey;
+  }
+
+  const key = crypto.randomUUID();
+  sessionStorage.setItem("key", key);
+
+  return key;
+};
+
 export const getKeyFromUrl = () => {
   const { searchParams } = new URL(location.href);
 
   return searchParams.get("key");
 };
+
+export const debouncedPostMessage = debounce(async (ev, key) => {
+  postMessage(ev.target.value, key);
+}, 1000);
 
 export const encryptMessage = (message: string, key: string) => {
   const iv = CryptoJS.lib.WordArray.random(16);
