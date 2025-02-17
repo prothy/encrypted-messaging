@@ -1,7 +1,7 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import "./App.css";
 import { debounce } from "./utils";
-import { postMessage } from "./api";
+import { getMessage, postMessage } from "./api";
 
 const statusTexts = {
   init: "Please enter your message",
@@ -18,18 +18,34 @@ const getKeyFromUrl = () => {
   return searchParams.get("key");
 };
 
+const key = getKeyFromUrl();
+
 function App() {
   const [isKeySet, setIsKeySet] = useState(false);
   const [status, setStatus] = useState<keyof typeof statusTexts>("init");
 
+  const [message, setMessage] = useState("Loading...");
+
   useLayoutEffect(() => {
-    setIsKeySet(!!getKeyFromUrl());
+    setIsKeySet(!!key);
+  }, []);
+
+  useEffect(() => {
+    const handleMessageContent = async () => {
+      if (key) {
+        const { message, valid } = await getMessage(key);
+
+        setMessage(`${valid}: ${message}`);
+      }
+    };
+
+    handleMessageContent();
   }, []);
 
   return (
     <>
       {isKeySet ? (
-        <main>Key is set</main>
+        <main>{message}</main>
       ) : (
         <main>
           {statusTexts[status]}
