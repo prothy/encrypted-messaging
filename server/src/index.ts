@@ -1,13 +1,31 @@
 import express from 'express'
 import cors from 'cors'
+import bodyParser from 'body-parser'
 
 const app = express()
 const port = 3000
 
-app.use(cors())
+const message = {
+    hmac: '',
+    content: ''
+}
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
+app.use(bodyParser.text())
+app.use(cors())
+app.use('/', (req, _, next) => {
+    console.log(req.method, req.body)
+    next()
+})
+
+app.get('/', (_, res) => {
+    res.set('X-Signature', message.hmac)
+    res.send(message.content)
+})
+
+app.post('/', (req, res) => {
+    message.content = req.body
+    message.hmac = req.get('X-Signature') ?? ''
+    res.send('Sent message!')
 })
 
 app.listen(port, () => {
