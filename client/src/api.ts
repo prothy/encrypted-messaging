@@ -5,7 +5,7 @@ import {
   decryptMessage,
 } from "./utils";
 
-const SERVER_URL = "http://localhost:3000/";
+const SERVER_URL = "https://localhost:3000/";
 const SIGNATURE_HEADER = "X-Signature";
 
 export const postMessage = async (message: string, key: string) => {

@@ -8,7 +8,7 @@ const statusTexts = {
 
 const key = generateKey();
 
-const receiverUrl = `http://localhost:4173/?key=${key}`;
+const receiverUrl = `https://${location.host}/?key=${key}`;
 
 export const Sender = () => {
   const [status, setStatus] = useState<keyof typeof statusTexts>("init");
