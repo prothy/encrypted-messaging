@@ -22,6 +22,8 @@ in the root directory.
 
 To run the project, simply run `npm run init` in the topmost folder, this will set up everything and launch both the client and server. You can access the client app at `https://localhost:4173` (if launched this way, the console will show the definite URL), the server uses `https://localhost:3000`.
 
+A limitation is that the app needs to be run in **Firefox**.
+
 For transparency, I have left notes as I completed the task, divided into my initial approach, changes during development, then some final thoughts.
 
 ## Before starting
